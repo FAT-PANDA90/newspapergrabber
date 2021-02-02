@@ -1,0 +1,32 @@
+<style type="text/css" media="screen, print">
+@font-face {
+    font-family: Handlee;
+    src: url("C:\Users\Sabyasachi\Google Drive\Python Projects\Daily_Compiler\Handlee-Regular.ttf");
+    /*font-stretch: ultra-condensed;*/
+}
+@page {
+    size: A4 landscape;max-height:100%;
+    max-width:100%
+}
+img {
+    height: 90%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: Handlee, serif;
+    font-size: 16px;
+    font-weight: 100;
+    font-style: inherit;
+    background: rgb(240, 240, 240);
+    color: rgb(63, 58, 45);
+    text-align: justify;
+    text-justify: inter-word;
+}
+html, body {
+        height: auto;
+}
+table {
+    width: 100%;
+}
+</style>

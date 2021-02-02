@@ -54,8 +54,8 @@ def http_error(func):
 
 
 class GetResourceMethods:
-    phantomjs_exe_path = "C:\\Users\\sabyasachi\\Google Drive\\Python Projects\\Daily_Compiler\\phantomjs.exe"
-    pdf_js_path = "C:\\Users\\sabyasachi\\Google Drive\\Python Projects\\Daily_Compiler\\papersize.js"
+    phantomjs_exe_path = "phantomjs.exe"
+    pdf_js_path = "papersize.js"
     opinion_articles_headers = ['opinion', 'wsj.com', 'theguardian.com/commentisfree/', 'globaltimes.cn/',
                                 'livemint.com/', 'dawn.com/']
     regex_search = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
@@ -107,7 +107,7 @@ class GetResourceMethods:
 
         :return: html string after adding style sheet
         """
-        with open('C:\\Users\\Sabyasachi\\Google Drive\\Python Projects\\Daily_Compiler\\print.css') as print_css:
+        with open('print.css') as print_css:
             out_html = print_css.read()
         return out_html
 
