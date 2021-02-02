@@ -1,45 +1,38 @@
-beautifulsoup4 @ file:///home/linux1/recipes/ci/beautifulsoup4_1610988766420/work
+beautifulsoup4==4.9.3
 breadability==0.1.20
 brotlipy==0.7.0
 cairocffi==1.2.0
 CairoSVG==2.5.1
 certifi==2020.12.5
-cffi @ file:///C:/ci/cffi_1606255207413/work
-chardet @ file:///C:/ci/chardet_1607706910910/work
-click @ file:///home/linux1/recipes/ci/click_1610990599742/work
-cryptography @ file:///C:/ci/cryptography_1607639129468/work
 cssselect==1.1.0
 cssselect2==0.4.1
 defusedxml==0.6.0
 docopt==0.6.2
 EbookLib==0.17.1
 et-xmlfile==1.0.1
-Flask @ file:///home/ktietz/src/ci/flask_1611932660458/work
+Flask==1.1.2
 html5lib==1.1
-idna @ file:///home/linux1/recipes/ci/idna_1610986105248/work
 itsdangerous==1.1.0
 jdcal==1.4.1
-Jinja2 @ file:///tmp/build/80754af9/jinja2_1612213139570/work
-lxml @ file:///C:/ci/lxml_1606516935960/work
-MarkupSafe @ file:///C:/ci/markupsafe_1594405949945/work
-openpyxl @ file:///tmp/build/80754af9/openpyxl_1610651698508/work
+MarkupSafe==1.1.1
+openpyxl==3.0.6
 pdfkit==0.6.1
 Pillow==8.1.0
 pycairo==1.20.0
-pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
-pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1608057966937/work
+pycparser==2.20
+pyOpenSSL==20.0.1
 PyPDF4==1.27.0
 Pyphen==0.10.0
 pyquery==1.4.3
-PySocks @ file:///C:/ci/pysocks_1594394709107/work
-requests @ file:///tmp/build/80754af9/requests_1608241421344/work
-selenium @ file:///C:/ci/selenium_1594408106746/work
-six @ file:///C:/ci/six_1605205426665/work
-soupsieve @ file:///tmp/build/80754af9/soupsieve_1607965878077/work
+PySocks==1.7.1
+requests==2.25.1
+selenium==3.141.0
 tinycss2==1.1.0
-urllib3 @ file:///tmp/build/80754af9/urllib3_1611694770489/work
 WeasyPrint==52.2
 webencodings==0.5.1
-Werkzeug @ file:///home/ktietz/src/ci/werkzeug_1611932622770/work
-win-inet-pton @ file:///C:/ci/win_inet_pton_1605306165655/work
+gunicorn==20.0.4
+itsdangerous==1.1.0
+Jinja2==2.10.3
+MarkupSafe==1.1.1
+Werkzeug==0.16.0
 wincertstore==0.2
