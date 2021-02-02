@@ -2,10 +2,10 @@ paperSize = {
         format: 'A4',
         orientation: 'portrait',
         margin: {
-            top: "0.85cm",
-            bottom: "0.85cm",
-            left: '0.85cm',
-            right: '0.85cm'
+            top: "0.55cm",
+            bottom: "0.55cm",
+            left: '0.55cm',
+            right: '0.55cm'
         },
         footer: {
             height: "1cm",
