@@ -28,7 +28,7 @@ def get_pdf():
     # return html_str
     if html_str and title_txt:
         make_html_pdf(html_str)
-        return send_file('C://Users//Sabyasachi//Google Drive//Python Projects//newspapergrabber//output.pdf', attachment_filename='output.pdf')
+        return send_file('output.pdf', attachment_filename='output.pdf')
 
 
 def make_html_pdf(html_str):
