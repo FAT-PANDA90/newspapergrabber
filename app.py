@@ -33,7 +33,7 @@ def get_pdf():
 
 def make_html_pdf(html_str):
     """Download the currently displayed page to target_path."""
-    driver = webdriver.PhantomJS('phantomjs')
+    driver = webdriver.PhantomJS('phantomjs.exe')
     html_bs64 = base64.b64encode(html_str.encode('utf-8')).decode()
     driver.get("data:text/html;base64," + html_bs64)
 
