@@ -969,8 +969,7 @@ class GetResourceMethods:
 
     @http_error
     def parse_wsj_url(self, input_url, url_index):
-        with open('C:\\Users\\Sabyasachi\\Google Drive\\Python Projects\\Daily_Compiler\\wsj_style.css', 'r',
-                  encoding='utf8') as fg:
+        with open('wsj_style.css', 'r',encoding='utf8') as fg:
             style_css = fg.read()
         wsj_url = input_url[0:20] + 'amp/' + input_url[20:]
         user_agent_wsj = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
