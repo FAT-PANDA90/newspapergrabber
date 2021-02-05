@@ -36,4 +36,4 @@ Jinja2==2.10.3
 MarkupSafe==1.1.1
 Werkzeug==0.16.0
 wincertstore==0.2
-beautifulsoup4=4.9.3
+bs4=4.9.3
