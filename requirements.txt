@@ -37,4 +37,3 @@ MarkupSafe==1.1.1
 Werkzeug==0.16.0
 wincertstore==0.2
 beautifulsoup4=4.9.3
-bert-extractive-summarizer=0.6.1
