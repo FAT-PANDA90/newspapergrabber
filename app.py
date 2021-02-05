@@ -48,19 +48,19 @@ def get_pdf():
                          attachment_filename=f'{title_txt}.pdf')
 
 
-@app.route("/get_summary", methods=['POST', 'GET'])
-def get_summary():
-    url = session['get_pdf']['url']
-    method_object = methods_file.GetResourceMethods()
-    parsed_uri = urlparse(url)
-    result = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
-    html_str, title_txt = method_object.select_parser(input_url_host_only=result, url_full=url)
-    soup = BeautifulSoup(html_str, 'lxml')
-    text = soup.findAll('p')
-    return_html = ''
-    for item in text:
-        return_html += item.text
-    return return_html
+# @app.route("/get_summary", methods=['POST', 'GET'])
+# def get_summary():
+#     url = session['get_pdf']['url']
+#     method_object = methods_file.GetResourceMethods()
+#     parsed_uri = urlparse(url)
+#     result = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+#     html_str, title_txt = method_object.select_parser(input_url_host_only=result, url_full=url)
+#     soup = BeautifulSoup(html_str, 'lxml')
+#     text = soup.findAll('p')
+#     return_html = ''
+#     for item in text:
+#         return_html += item.text
+#     return return_html
 
 def make_html_pdf(html_str):
     """Download the currently displayed page to target_path."""
