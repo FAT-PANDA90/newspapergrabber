@@ -208,7 +208,7 @@ class GetResourceMethods:
             return None, title
 
     @http_error
-    def parse_outline_url(self, input_url, url_index):
+    def parse_outline_url(self, input_url):
         regex_search = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
         url = 'https://outline.com/' + input_url
         webdriver.DesiredCapabilities.FIREFOX['proxy'] = {
@@ -232,7 +232,7 @@ class GetResourceMethods:
         new_soup = BeautifulSoup(raw_content['content'], 'lxml')
         html1 = f'<html><head><meta charset="utf-8"><title>{soup_epw.title.text}</title>'
         html1 += self.add_print_css()
-        html1 += f'</head><body><h1><a href="{input_url}">{url_index}_{soup_epw.title.text}</a></h1>'
+        html1 += f'</head><body><h1><a href="{input_url}">{soup_epw.title.text}</a></h1>'
         for child in new_soup.body.children:
             if not child.name:
                 continue
@@ -250,9 +250,8 @@ class GetResourceMethods:
         return html1, title
 
     @http_error
-    def parse_dawn(self, input_url, url_index):
+    def parse_dawn(self, input_url):
         # print('dawn called')
-        url_index = 'is_dummy'
         amp_url, title = self.get_amp_url_requests(input_url)
         response_dawn = self.get_random_response(amp_url)
         soup = BeautifulSoup(response_dawn.content, 'lxml')
@@ -267,7 +266,7 @@ class GetResourceMethods:
         return html, title
 
     @http_error
-    def parse_epw_non_outline(self, input_url, url_index):
+    def parse_epw_non_outline(self, input_url):
         response_epw = self.get_random_response(input_url)
         if response_epw.status_code == 404:
             input_url = unquote(input_url)
@@ -281,7 +280,7 @@ class GetResourceMethods:
         title = soup_epw.title.text
         html_epw = f'<html><head><meta charset="utf-8"><title>{soup_epw.title.text}</title>'
         html_epw += self.add_print_css()
-        html_epw += f'</head><body><h1><a href="{input_url}">{url_index}_{header}</a></h1>'
+        html_epw += f'</head><body><h1><a href="{input_url}">{header}</a></h1>'
         article = soup_epw.find('div', {'id': 'block-system-main'})
         article = article.findAll('div', {'class', 'content'})
         article = article[1]
@@ -299,12 +298,12 @@ class GetResourceMethods:
         return html_epw, title
 
     @http_error
-    def parse_dte(self, input_url, url_index):
+    def parse_dte(self, input_url):
         amp_url, title = self.get_amp_url_requests(input_url)
         if not amp_url and not title:
             amp_url, title = self.get_amp_url_selenium(input_url)
         if title and not amp_url:
-            dte_html, title = self.parse_outline_url(input_url=input_url, url_index=url_index)
+            dte_html, title = self.parse_outline_url(input_url=input_url)
             return dte_html, title
         # print(amp_url)
         response_dte = self.get_random_response(amp_url)
@@ -321,14 +320,14 @@ class GetResourceMethods:
         article.find('header').decompose()
         header_tag = soup_dte.find('h1')
         new_header_tag = soup_dte.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         dte_html += str(article)
         return dte_html, title
 
     @http_error
-    def parse_livemint_url(self, input_url, url_index):
+    def parse_livemint_url(self, input_url):
         amp_url, title = self.get_amp_url_requests(input_url)
         if not amp_url and not title:
             amp_url, title = self.get_amp_url_selenium(input_url)
@@ -346,7 +345,7 @@ class GetResourceMethods:
             unwanted.decompose()
         header_tag = article.find('h1')
         new_header_tag = soup_livemint.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         livemint_html = f'<html><head><meta charset="utf-8"><title>{title}</title>'
@@ -387,7 +386,7 @@ class GetResourceMethods:
         return html, title
 
     @http_error
-    def parse_insights_daily_non_outline(self, dummy_url, url_index):
+    def parse_insights_daily_non_outline(self, dummy_url):
         dummy_url = ''
         day = datetime.now()
         if day.strftime('%A') == 'Monday':
@@ -400,7 +399,7 @@ class GetResourceMethods:
         req_insights = self.get_random_response(parse_url)
         soup = BeautifulSoup(req_insights.content, 'lxml')
         header = soup.find('h1', {'class': 'entry-title'}).text
-        header = f'{url_index}_{header}'
+        header = f'{header}'
         html_insights = f'<html><head><meta charset="utf-8"><title>{soup.title.text}</title>'
         html_insights += self.add_print_css()
         html_insights += f'</head><body><h1><a href="{parse_url}">{header}</a></h1>'
@@ -603,7 +602,7 @@ class GetResourceMethods:
         return True
 
     @http_error
-    def parse_economist(self, input_url, url_index):
+    def parse_economist(self, input_url):
         amp_url, title = self.get_amp_url_requests(input_url)
         if not amp_url and not title:
             amp_url, title = self.get_amp_url_selenium(input_url)
@@ -613,7 +612,7 @@ class GetResourceMethods:
         eco_html += self.add_print_css() + '</head><body>'
         header_tag = soup_economist.find('span', {'class': 'article__headline'})
         new_header_tag = soup_economist.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         eco_html += str(soup_economist.find('header', {'class': 'article__header'}))
@@ -633,7 +632,7 @@ class GetResourceMethods:
         return eco_html, title
 
     @http_error
-    def parse_hkfp(self, input_url, url_index):
+    def parse_hkfp(self, input_url):
         response = self.get_random_response(input_url)
         soup = BeautifulSoup(response.content, 'lxml')
         header = soup.find('h1', {'class': 'entry-title'})
@@ -641,7 +640,7 @@ class GetResourceMethods:
         title = re.sub('^\s+', '', soup.title.text)
         html = f'<html><head><meta charset="utf-8"><title>{title}</title>'
         html += self.add_print_css() + '</head><body>'
-        html += f'<h1><a href="{input_url}">{url_index}_{header.text}</a></h1>'
+        html += f'<h1><a href="{input_url}">{header.text}</a></h1>'
         article = soup.find('div', {'class': 'entry-content'})
         for item in article.find_all(['figure', 'aside', 'section']):
             item.decompose()
@@ -717,14 +716,14 @@ class GetResourceMethods:
         return html1, soup_func.title.text
 
     @http_error
-    def parse_indian_express_faster(self, input_url, url_index):
+    def parse_indian_express_faster(self, input_url):
         response_ie = self.get_random_response(input_url)
         soup_ie = BeautifulSoup(response_ie.content, 'lxml')
         title = soup_ie.title.text
         html_ie = f'<html><head><meta charset="utf-8"><title>{title}</title>'
         html_ie += self.add_print_css() + '</head><body>'
         header = soup_ie.find('h1', {'class': 'native_story_title'})
-        html_ie += f"<h1><a href='{input_url}'>{url_index}_{header.text}</a></h1>"
+        html_ie += f"<h1><a href='{input_url}'>{header.text}</a></h1>"
         article = soup_ie.find('div', {'class': 'full-details'})
         article.find('div', {'class': 'share-social'}).decompose()
         for figure in article.findAll('img', {'class': ['size-full', 'size-medium']}):
@@ -742,7 +741,7 @@ class GetResourceMethods:
         return html_ie, title
 
     @http_error
-    def parse_perspective_anthro(self, input_url, url_index):
+    def parse_perspective_anthro(self, input_url):
         amp_url, title = self.get_amp_url_requests(input_url)
         if not amp_url and not title:
             amp_url, title = self.get_amp_url_selenium(input_url)
@@ -761,14 +760,14 @@ class GetResourceMethods:
             item.decompose()
         header_tag = article.find('h1', {'class': 'amp-wp-title'})
         new_header_tag = soup_perspec.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         perspec_html += str(article)
         return perspec_html, title
 
     @http_error
-    def parse_sapiens(self, input_url, url_index):
+    def parse_sapiens(self, input_url):
         options = Options()
         fp = webdriver.FirefoxProfile(
             'C:\\Users\\Sabyasachi\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\703g68w9.python_user')
@@ -792,7 +791,7 @@ class GetResourceMethods:
         del soup_sapiens.find('h1', {'itemprop': 'headline'})['class']
         header_tag = soup_sapiens.find('h1', {'itemprop': 'headline'})
         new_header_tag = soup_sapiens.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         sapiens_html += f"{str(header_tag)}"
@@ -805,7 +804,7 @@ class GetResourceMethods:
         return sapiens_html, title
 
     @http_error
-    def parse_taipei_times(self, input_url, url_index):
+    def parse_taipei_times(self, input_url):
         # print(input_url)
         user_agent_wsj = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
         headers_wsj = {'User-Agent': user_agent_wsj, 'Referer': 'https://www.facebook.com/',
@@ -819,7 +818,7 @@ class GetResourceMethods:
             item.decompose()
         header_tag = soup_taiwan.find('h1')
         new_header_tag = soup_taiwan.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         author_tag = soup_taiwan.find('div', {'class': 'name'})
@@ -835,7 +834,7 @@ class GetResourceMethods:
         return html, soup_taiwan.title.text
 
     @http_error
-    def parse_guradian_nytimes_globaltimes_url(self, input_url, url_index):
+    def parse_guradian_nytimes_globaltimes_url(self, input_url):
         url = 'https://mercury.postlight.com/amp?url=' + input_url
         mob_agent = 'Mozilla/5.0 (Linux; Android 10; SM-M315F) AppleWebKit/537.36 ' \
                     '(KHTML, like Gecko) Chrome/81.0.4044.117 Mobile Safari/537.36'
@@ -872,7 +871,7 @@ class GetResourceMethods:
         article_full.find('div', {'class': 'hg-social-logo-block'}).decompose()
         header_tag = article_full.find('h1', {'class': 'hg-title'})
         new_header_tag = soup_guardian.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         guardian_html += str(article_full)
@@ -932,7 +931,7 @@ class GetResourceMethods:
         return html2, title
 
     @http_error
-    def parse_hindu_faster(self, input_url, url_index):
+    def parse_hindu_faster(self, input_url):
         if 'cartoonscape' in input_url:
             return None, None
         if '/thread/' in input_url:
@@ -950,7 +949,7 @@ class GetResourceMethods:
         article = soup.find('div', {'class': 'article'})
         header_tag = article.find('h1', {'class': ['title', 'special-heading', 'headline']})
         new_header_tag = soup.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         article.find_all('div', {'class', ''})[1].decompose()
@@ -968,7 +967,7 @@ class GetResourceMethods:
         return html_hindu, title
 
     @http_error
-    def parse_wsj_url(self, input_url, url_index):
+    def parse_wsj_url(self, input_url):
         with open('wsj_style.css', 'r',encoding='utf8') as fg:
             style_css = fg.read()
         wsj_url = input_url[0:20] + 'amp/' + input_url[20:]
@@ -992,7 +991,7 @@ class GetResourceMethods:
             double_stop.decompose()
         header_tag = new_soup_wsj.find('h1', {'class': 'wsj-article-headline'})
         new_header_tag = new_soup_wsj.new_tag("a", href=f'{input_url}')
-        new_header_tag.string = f'{url_index}_{header_tag.text}'
+        new_header_tag.string = f'{header_tag.text}'
         header_tag.string = ''
         header_tag.append(new_header_tag)
         wsj_html += str(new_soup_wsj) + '</body></html>'
@@ -1000,10 +999,9 @@ class GetResourceMethods:
         return wsj_html, title
 
     @http_error
-    def parse_wp_url_selenium(self, input_url, url_index):
+    def parse_wp_url_selenium(self, input_url):
         """
         this function takes a url input and returns html and title
-        :param url_index: html file index to locate in Indian Express folder
         :param input_url: washington post url
         :return: a list of html elements
         """
@@ -1034,7 +1032,7 @@ class GetResourceMethods:
             elem = new_driver.find_element_by_class_name("article-body")
             soup = BeautifulSoup(elem.get_attribute('innerHTML'), 'lxml')
             new_driver.close()
-        title = f'{url_index}_{title}'
+        title = f'{title}'
         washingtonpost_html = f"<html><head><meta charset='utf-8'><title>{title}</title>"
         washingtonpost_html += self.add_print_css() + '</head><body>'
         washingtonpost_html += f"<h1><a href='{input_url}'>{title}</a></h1>"
@@ -1046,14 +1044,14 @@ class GetResourceMethods:
         return washingtonpost_html, title
 
     @http_error
-    def parse_wp_url_ampway(self, input_url,url_index):
+    def parse_wp_url_ampway(self, input_url):
         amp_url, title = self.get_amp_url_requests(input_url)
         if not amp_url:
             amp_url, title = self.get_amp_url_selenium(input_url)
         if not amp_url:
-            html_err_free, title = self.parse_outline_url(input_url=input_url,url_index=url_index)
+            html_err_free, title = self.parse_outline_url(input_url=input_url)
             return html_err_free, title
-        title1 = f'{url_index}_{title}'
+        title1 = f'{title}'
         user_agent_google = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
         headers_google = {'User-Agent': user_agent_google, 'Referer': 'https://www.facebook.com/',
                           'X-Forwarded-For': '66.249.66.1'}
@@ -1182,23 +1180,23 @@ class GetResourceMethods:
         epub.write_epub(name=self.epub_file_name, book=self.indian_express_epub)
         return True
 
-    def parse_other(self, input_url, url_index):
+    def parse_other(self, input_url):
         response_other = self.get_random_response(input_url)
         soup_other = BeautifulSoup(response_other.content, 'lxml')
         doc = Article(html=str(soup_other))
         tmp1 = doc.readable
-        title = f'{url_index}_{soup_other.title.text}'
+        title = f'{soup_other.title.text}'
         tmp_html = f'<html><head><meta charset="utf-8"><title>{title}</title>'
         tmp_html += self.add_print_css() + '</head><body>'
         tmp_html += f"<h1><a href='{input_url}'>{title}</a></h1>" + tmp1 + "</body></html>"
         return tmp_html, title
 
-    def select_parser(self, input_url_host_only, url_full, url_index):
+    def select_parser(self, input_url_host_only, url_full):
         try:
             func = self.decision_dict[input_url_host_only]
-            html, title = func(url_full, url_index)
+            html, title = func(url_full)
         except Exception:
-            html, title = self.parse_other(url_full, url_index)
+            html, title = self.parse_other(url_full)
         return html, title
 
     # def make_html_pdf(self,html_string, html_index):
@@ -1224,8 +1222,7 @@ class GetResourceMethods:
     #     os.chdir(bef_path)
     #     return True
 
-    def parse_history_articles(self, input_url, url_index):
-        url_index = 'is_dummy'
+    def parse_history_articles(self, input_url):
         if input_url == 'http://www.thepeoplehistory.com/this-day-in-history.html':
             response_thisday = self.get_random_response(input_url)
             soup_hist = BeautifulSoup(response_thisday.content, 'lxml')
