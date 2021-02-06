@@ -10,7 +10,7 @@ class SummarizeNp:
         sentences = []
 
         for sentence in article:
-            print(sentence)
+            # print(sentence)
             sentences.append(sentence.replace("[^a-zA-Z]", " ").split(" "))
         sentences.pop()
 
@@ -19,6 +19,7 @@ class SummarizeNp:
     def sentence_similarity(self, sent1, sent2, stopwords_simlarity=None):
         if stopwords_simlarity is None:
             stopwords_simlarity = []
+        stoplist = set(stopwords.words("english"))
 
         sent1 = [w.lower() for w in sent1]
         sent2 = [w.lower() for w in sent2]
@@ -30,13 +31,13 @@ class SummarizeNp:
 
         # build the vector for the first sentence
         for w in sent1:
-            if w in stopwords:
+            if w in stoplist:
                 continue
             vector1[all_words.index(w)] += 1
 
         # build the vector for the second sentence
         for w in sent2:
-            if w in stopwords:
+            if w in stoplist:
                 continue
             vector2[all_words.index(w)] += 1
 
@@ -76,4 +77,5 @@ class SummarizeNp:
             summarize_text.append(" ".join(ranked_sentence[i][1]))
 
         # Step 5 - Offcourse, output the summarize text
+        print(summarize_text)
         return summarize_text

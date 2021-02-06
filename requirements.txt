@@ -39,3 +39,4 @@ wincertstore==0.2
 networkx==2.5
 nltk==3.5
 numpy
+yattag==1.14.0

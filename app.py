@@ -9,6 +9,7 @@ import os
 import sys
 from bs4 import BeautifulSoup
 from summarize_url import SummarizeNp
+from yattag import Doc
 
 app = Flask(__name__, template_folder='./frontend/templates', static_folder='./frontend/static')
 app.secret_key = 'bhaisa'
@@ -36,16 +37,7 @@ def get_pdf():
     html_str, title_txt = method_object.select_parser(input_url_host_only=result, url_full=url)
     # return html_str
     if html_str and title_txt:
-        outfile = make_html_pdf(html_str)
-        print(f'{outfile} created', file=sys.stdout)
-        # return send_file(outfile, attachment_filename='title_txt.pdf')
-        return_data = io.BytesIO()
-        with open(outfile, 'rb') as fo:
-            return_data.write(fo.read())
-        # (after writing, cursor will be at last byte, so move it to start)
-        return_data.seek(0)
-        os.remove(outfile)
-        print(f'{outfile} deleted', file=sys.stdout)
+        return_data = make_pdf(html_string=html_str)
         return send_file(return_data, mimetype='application/pdf',
                          attachment_filename=f'{title_txt}.pdf')
 
@@ -64,8 +56,33 @@ def get_summary():
         return_html += item.text
     summarizer = SummarizeNp()
     summary = summarizer.generate_summary(html_str=return_html)
-    print('came here', file=sys.stdout)
-    return summary
+    summary = ". ".join(summary)
+    # got summary text now generating html string
+    doc, tag, text = Doc().tagtext()
+    with tag('head'):
+        with tag('meta', charset='UTF-8'):
+            text()
+    with tag('body'):
+        with tag('h2', style="text-align: center;"):
+            with tag('span', style="color: #ff0000;"):
+                text('Hard Work of FATPANDA')
+        with tag('hr'):
+            text()
+        with tag('h2', style='text-align: center;'):
+            with tag('span', style='text-decoration: underline; color: #000080;'):
+                with tag('strong'):
+                    text(title_txt)
+        with tag('h3', style="text-align: center;"):
+            with tag('span', style="color: #008000;"):
+                text('Summary Generated')
+        with tag('p', align='justify'):
+            with tag('span', style='color: #000000;'):
+                text(summary)
+    temp = doc.getvalue()
+    return_data = make_pdf(html_string=temp)
+    return send_file(return_data, mimetype='application/pdf',
+                     attachment_filename=f'{title_txt}.pdf')
+
 
 def make_html_pdf(html_str):
     """Download the currently displayed page to target_path."""
@@ -94,7 +111,21 @@ def make_html_pdf(html_str):
     return f'{utc_timestamp}.pdf'
 
 
+def make_pdf(html_string):
+    outfile = make_html_pdf(html_string)
+    print(f'{outfile} created', file=sys.stdout)
+    # return send_file(outfile, attachment_filename='title_txt.pdf')
+    return_data = io.BytesIO()
+    with open(outfile, 'rb') as fo:
+        return_data.write(fo.read())
+    # (after writing, cursor will be at last byte, so move it to start)
+    return_data.seek(0)
+    os.remove(outfile)
+    print(f'{outfile} deleted', file=sys.stdout)
+    return return_data
+
+
 if __name__ == '__main__':
-    # app.run(host='127.0.0.1', port=1200)
-    from waitress import serve
-    serve(app, host="0.0.0.0", port=8080)
+    app.run(host='127.0.0.1', port=1200)
+    # from waitress import serve
+    # serve(app, host="0.0.0.0", port=8080)
