@@ -21,8 +21,8 @@ def hello_world():
         if request.form['action'] == 'pdf':
             return redirect(url_for("get_pdf"))
         else:
-            # return redirect(url_for("get_summary"))
-            return '<h1> UNDER CONSTRUCTION</h1>'
+            return redirect(url_for("get_summary"))
+            # return '<h1> UNDER CONSTRUCTION</h1>'
     else:
         return render_template('index.html')
 
